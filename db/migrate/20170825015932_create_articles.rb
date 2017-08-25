@@ -4,7 +4,7 @@ class CreateArticles < ActiveRecord::Migration[5.1]
       t.string :title
       t.string :username
       t.text :body
-      t.references :parent, foreign_key: true
+      t.references :parent
       t.integer :like
       t.integer :bad
 
