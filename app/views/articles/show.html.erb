@@ -22,13 +22,15 @@
 
 <p>
   <strong>Like:</strong>
-  <%= @article.like %>
+  <%= @article.like || 0 %>
 </p>
 
 <p>
   <strong>Bad:</strong>
-  <%= @article.bad %>
+  <%= @article.bad || 0 %>
 </p>
 
+<%= link_to 'Like', like_article_path(@article), method: :post %> |
+<%= link_to 'Bad', bad_article_path(@article), method: :post %> |
 <%= link_to 'Edit', edit_article_path(@article) %> |
 <%= link_to 'Back', articles_path %>
