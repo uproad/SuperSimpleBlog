@@ -1,31 +1,31 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_article, only: [:show, :edit, :update, :destroy, :like, :bad]
+  
   # GET /articles
   # GET /articles.json
   def index
     @articles = Article.all
   end
-
+  
   # GET /articles/1
   # GET /articles/1.json
   def show
   end
-
+  
   # GET /articles/new
   def new
     @article = Article.new
   end
-
+  
   # GET /articles/1/edit
   def edit
   end
-
+  
   # POST /articles
   # POST /articles.json
   def create
     @article = Article.new(article_params)
-
+    
     respond_to do |format|
       if @article.save
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
@@ -36,7 +36,7 @@ class ArticlesController < ApplicationController
       end
     end
   end
-
+  
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
       end
     end
   end
-
+  
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
@@ -60,15 +60,43 @@ class ArticlesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
+  # POST /articles/1/like
+  def like
+    @article.like = (@article.like || 0) + 1
+    respond_to do |format|
+      if @article.save
+        format.html { redirect_to @article, notice: 'Article was successfully like.' }
+        format.json { render :show, status: :created, location: @article }
+      else
+        format.html { render :show }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  # POST /articles/1/bad
+  def bad
+    @article.bad = (@article.bad || 0) + 1
+    respond_to do |format|
+      if @article.save
+        format.html { redirect_to @article, notice: 'Article was successfully bad.' }
+        format.json { render :show, status: :created, location: @article }
+      else
+        format.html { render :show }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_article
-      @article = Article.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def article_params
-      params.require(:article).permit(:title, :username, :body, :parent_id, :like, :bad)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_article
+    @article = Article.find(params[:id])
+  end
+  
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def article_params
+    params.require(:article).permit(:title, :username, :body)
+  end
 end
